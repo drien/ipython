@@ -64,7 +64,10 @@ class TerminalPdb(Pdb):
 
                 p = Path(self.shell.debugger_history_file).expanduser()
                 if not p.exists():
-                    p.touch()
+                    try:
+                        p.touch()
+                    except FileNotFoundError:
+                        self.debugger_history = InMemoryHistory()
                 self.debugger_history = FileHistory(os.path.expanduser(str(p)))
             else:
                 self.debugger_history = InMemoryHistory()
